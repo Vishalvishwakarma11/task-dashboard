@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setTasks } from "./store/tasksSlice";
@@ -51,14 +51,16 @@ function App() {
     <Router>
       <div className="flex h-screen bg-slate-50">
         <Sidebar />
-        <main className="flex-1 overflow-y-auto p-8">
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/tasks" element={<Tasks />} />
-            <Route path="/tasks/create" element={<CreateTask />} />
-            <Route path="/profile" element={<Profile />} />
-          </Routes>
-        </main>
+        <Suspense fallback={<div>Loading...</div>}>
+          <main className="flex-1 overflow-y-auto p-8">
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/tasks" element={<Tasks />} />
+              <Route path="/tasks/create" element={<CreateTask />} />
+              <Route path="/profile" element={<Profile />} />
+            </Routes>
+          </main>
+        </Suspense>
       </div>
     </Router>
   );

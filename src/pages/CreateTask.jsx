@@ -130,6 +130,7 @@ const CreateTask = () => {
           {/* Action Buttons */}
           <div className="flex gap-3 pt-5 border-t border-slate-200">
             <button
+              disabled={schema.status == "Pending"}
               type="submit"
               className="flex-1 bg-slate-900 hover:bg-slate-800 text-white font-semibold py-2.5 px-5 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-center gap-2 text-sm"
             >

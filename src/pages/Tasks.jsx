@@ -17,11 +17,29 @@ import {
 const Tasks = () => {
   const dispatch = useDispatch();
   const { tasks, filter } = useSelector((state) => state.tasks);
-
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [debounceVal, setDebounceVal] = useState("");
   const itemsPerPage = 8;
+
+  function debounce(cb, delay) {
+    let timeoutId;
+    return function (...args) {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+
+      timeoutId = setTimeout(() => {
+        cb(...args);
+      }, delay);
+    };
+  }
+
+  const debouncedChange = debounce((inputValue) => {
+    console.log("Debounced:", inputValue);
+    setDebounceVal(inputValue);
+  }, 2000);
 
   let displayed = tasks
     .filter((task) => {
@@ -30,7 +48,7 @@ const Tasks = () => {
       return true;
     })
     .filter((task) =>
-      task.title.toLowerCase().includes(searchTerm.toLowerCase())
+      task.title.toLowerCase().includes(debounceVal.toLowerCase())
     );
 
   if (sortConfig) {
@@ -137,6 +155,7 @@ const Tasks = () => {
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
+              debouncedChange(e.target.value);
               setCurrentPage(1);
             }}
             className="w-full max-w-md pl-9 pr-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500/50 focus:border-slate-500 bg-white shadow-sm text-sm hover:border-slate-400 transition-all"
